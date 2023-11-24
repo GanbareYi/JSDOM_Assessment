@@ -313,16 +313,19 @@ function filterByCity(city) {
   If the value is not "0" call `filterByCity()` passing the value selected by
   the user. Then call `render()` with the filtered list.
 */
-function filterHandler(event) {
+function filterHandler() {
 
-  const city = event.target.value;
+  const selectElement = document.querySelector("#filterOptions");
+  selectElement.addEventListener("change", (event) => {
+    event.preventDefault();
+    const city = event.target.value;
 
-  if (city === "0") {
-    render(contacts);
-  } else {
-    const filterContacts = filterByCity(city);
-    render(filterContacts);
-  }
+    if (city === "0") {
+      render(contacts);
+    } else {
+      const filterContacts = filterByCity(city);
+      render(filterContacts);
+  }});
 }
 
 /*
@@ -359,17 +362,22 @@ function deleteContact(id) {
   corresponding `data-id` then call `deleteContact()` and re-render 
   the list.
 */
-function deleteButtonHandler(event) {
-  if (event.target && event.target.nodeName == "BUTTON") {
+function deleteButtonHandler() {
 
-    const contactToDel = event.target.parentNode;
-    const id = contactToDel.getAttribute("data-id");
+  const delBtns = document.querySelector("#contacts");
+  delBtns.addEventListener("click", (event) => {
+    if (event.target && event.target.nodeName == "BUTTON") {
+      event.preventDefault();
 
-    const contactsSec = document.querySelector("#contacts");
-    contactsSec.removeChild(contactToDel);
+      const contactToDel = event.target.parentNode;
+      const id = contactToDel.getAttribute("data-id");
 
-    deleteContact(id);
-  }
+      const contactsSec = document.querySelector("#contacts");
+      contactsSec.removeChild(contactToDel);
+
+      deleteContact(id);
+    }
+  });
 }
 
 /*
@@ -377,14 +385,18 @@ function deleteButtonHandler(event) {
   required event listeners, call loadCities() then call render().
 */
 function main() {
-  const main = document.querySelector("#book");
+  // const main = document.querySelector("#book");
 
-  main.addEventListener("click", deleteButtonHandler);
-  main.addEventListener("change", filterHandler);
+  // main.addEventListener("click", deleteButtonHandler);
+  // main.addEventListener("change", filterHandler);
+ 
+  deleteButtonHandler();
+  filterHandler(); 
 
   loadCities(contacts);
 
   render(contacts);
+
 }
 
 window.addEventListener("DOMContentLoaded", main);
